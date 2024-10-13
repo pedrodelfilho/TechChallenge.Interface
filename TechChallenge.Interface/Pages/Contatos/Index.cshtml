@@ -1,0 +1,53 @@
+﻿@page
+@model TechChallenge.Interface.Pages.Contatos.IndexModel
+
+@{
+    ViewData["Title"] = "Contatos";
+}
+
+<h1>Contatos</h1>
+<p>
+    <a asp-page="Create">Registrar novo contato</a>
+</p>
+<form method="get">
+    <div class="form-group">
+        <select name="NrDDD" class="form-control" style="width:150px" onchange="this.form.submit()">
+            <option value="">Filtrar por DDD</option>
+            <option value="">Todos</option>
+            @foreach (var ddd in Model.DDDs)
+            {
+                var selectedAttribute = Model.SelectedNrDDD == ddd.NrDDD ? "selected" : string.Empty;
+                <!option value="@ddd.NrDDD" @selectedAttribute>
+                    @ddd.NrDDD
+                </!option>
+            }
+        </select>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>DDD</th>
+            <th>Telefone</th>
+            <th>E-mail</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Contato)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                <td>@Html.DisplayFor(modelItem => item.DDD.NrDDD)</td>
+                <td>@Html.DisplayFor(modelItem => item.NrTelefone)</td>
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

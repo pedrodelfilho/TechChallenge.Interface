@@ -1,0 +1,49 @@
+﻿@page
+@model TechChallenge.Interface.Pages.Contatos.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Registrar novo contato</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ContatoRequest.Nome" class="control-label">Nome completo</label>
+                <input asp-for="ContatoRequest.Nome" class="form-control" />
+                <span asp-validation-for="ContatoRequest.Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContatoRequest.NrDDD" class="control-label">DDD</label>
+                <select asp-for="ContatoRequest.NrDDD" class="form-control" asp-items="ViewBag.NrDDD"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContatoRequest.NrTelefone" class="control-label">Celular</label>
+                <input asp-for="ContatoRequest.NrTelefone" class="form-control" />
+                <span asp-validation-for="ContatoRequest.NrTelefone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContatoRequest.Email" class="control-label">E-mail</label>
+                <input asp-for="ContatoRequest.Email" class="form-control" />
+                <span asp-validation-for="ContatoRequest.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary my-3"  />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Voltar para lista de contatos</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

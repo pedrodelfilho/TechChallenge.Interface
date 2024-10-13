@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:2265",
+      "sslPort": 44300
+    }
+  },
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:5284",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "API_BASE_URL": "http://localhost:5153"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "API_BASE_URL": "http://localhost:5153"
+      }
+    },
+    "Azure Production Simulation": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "https://techchallenge-web-e9gacubqb6hqhxcp.brazilsouth-01.azurewebsites.net",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "API_BASE_URL": "https://techchallenge-api-fdcegua0g0ffbqbb.brazilsouth-01.azurewebsites.net"
+      }
+    }
+  }
+}

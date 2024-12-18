@@ -21,7 +21,8 @@ jobs:
       - name: Add Azure Blob Storage as NuGet source
         run: |
           echo "Adding Azure Blob Storage as NuGet source"
-          dotnet nuget add source "https://techchallengeblob.blob.core.windows.net/meus-nugets?sp=r&st=2024-12-18T01:13:19Z&se=2024-12-18T09:13:19Z&spr=https&sv=2022-11-02&sr=c&sig=8FzRGPrm9AsxeED1cK%2Fde5m23R3VDSBPPHNiocEAWE0%3D" --name AzureBlobFeed --username {empty} --password {empty}
+          $sasToken = "https://techchallengeblob.blob.core.windows.net/meus-nugets?sp=r&st=2024-12-18T01:13:19Z&se=2024-12-18T09:13:19Z&spr=https&sv=2022-11-02&sr=c&sig=8FzRGPrm9AsxeED1cK%2Fde5m23R3VDSBPPHNiocEAWE0%3D"
+          dotnet nuget add source "$sasToken" --name AzureBlobFeed --username "" --password ""
 
       - name: Build with dotnet
         run: dotnet build --configuration Release

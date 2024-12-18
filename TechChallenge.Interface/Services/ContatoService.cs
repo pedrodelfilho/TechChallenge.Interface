@@ -5,27 +5,28 @@ using TechChallenge.Entities;
 using TechChallenge.Entities.Requests;
 using TechChallenge.Interface.Extensions;
 using TechChallenge.Interface.Interfaces;
+using TechChallenge.Interface.Entities;
+using Nest;
 
 public class ContatoService : IContatoService
 {
     private readonly HttpClient _httpClient;
     private readonly string _resourceContato;
+    private readonly IMensageria _mensageria;
 
-    public ContatoService(HttpClient httpClient, IOptions<ApiSettings> settings)
+    public ContatoService(HttpClient httpClient, IOptions<ApiSettings> settings, IMensageria mensageria)
     {
         _httpClient = httpClient;
         _resourceContato = settings.Value.ResourceContato;
+        _mensageria = mensageria;
     }
 
-    public async Task<Contato> AtualizarContato(AtualizarContatoRequest request)
+    public async Task AtualizarContato(AtualizarContatoRequest request)
     {
-        var response = await _httpClient.PutAsJsonAsync($"{_resourceContato}atualizar/", request);
-        response.EnsureSuccessStatusCode();
-
-        return await DeserializarContato(response);
+        _mensageria.PublicarMensagem(BuildAtualizarContatoMensagem(request));
     }
 
-    public async Task<Contato> CadastrarContato(RegistrarContatoRequest request)
+    public async Task CadastrarContato(RegistrarContatoRequest request)
     {
         var contatos = await ObterTodosContatos();
 
@@ -39,13 +40,35 @@ public class ContatoService : IContatoService
             throw new Exception("Contato não registrado! " + contatoExist);
         else
         {
-            var response = await _httpClient.PostAsJsonAsync($"{_resourceContato}cadastrar", request);
-            response.EnsureSuccessStatusCode();
-
-            return await DeserializarContato(response);
+            _mensageria.PublicarMensagem(BuildInsertContatoMensagem(request));
         }        
     }
-    
+
+    public async Task RemoverContato(long id)
+    {
+        _mensageria.PublicarMensagem(BuildDeleteContatoMensagem(id));
+    }
+
+    private static string BuildDeleteContatoMensagem(long id)
+    {
+        var contato = new ContatoCommand { Id = id, Nome = string.Empty, NrDDD = 0, NrTelefone = string.Empty, Email = string.Empty, Evento = "delete" };
+
+        return JsonSerializer.Serialize(contato);
+    }
+
+    private static string BuildInsertContatoMensagem(RegistrarContatoRequest request)
+    {
+        var contato = new ContatoCommand { Id = null, Nome = request.Nome, NrDDD = request.NrDDD, NrTelefone = request.NrTelefone, Email = request.Email, Evento = "insert" };
+
+        return JsonSerializer.Serialize(contato);
+    }
+
+    private static string BuildAtualizarContatoMensagem(AtualizarContatoRequest request)
+    {
+        var contato = new ContatoCommand { Id = null, Nome = request.Nome, NrDDD = request.NrDDD, NrTelefone = request.NrTelefone, Email = request.Email, Evento = "update" };
+
+        return JsonSerializer.Serialize(contato);
+    }
 
     public async Task<Contato> ObterContatoPorId(long id)
     {
@@ -61,11 +84,6 @@ public class ContatoService : IContatoService
         response.EnsureSuccessStatusCode();
 
         return await DeserializarListContato(response);
-    }
-
-    public async Task RemoverContato(long id)
-    {
-        await _httpClient.DeleteAsync($"{_resourceContato}remover/{id}");
     }
 
     private static async Task<Contato> DeserializarContato(HttpResponseMessage response)
